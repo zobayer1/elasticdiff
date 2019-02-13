@@ -62,8 +62,8 @@ def main(conf):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--configuration', required=True, help='Please specify configuration json')
+    parser.add_argument('-c', '--config', required=True, help='Please specify configuration json')
     args = parser.parse_args()
 
-    with open(args.configuration, 'r', encoding='utf-8') as fin:
+    with open(args.config, 'r', encoding='utf-8') as fin:
         main(json.loads(fin.read()))
