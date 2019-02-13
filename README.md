@@ -104,10 +104,30 @@ The real bottleneck in this system is the reading speed from Elasticsearch indic
 impose startup overheads and collecting the results will also add some delays. A pool of 8 workers showed no improvements
 in performance.
 
-### How is Memory Overhead?
+### How big is Memory Overhead?
 
 This application has virtually 0 memory overhead. No buffer memory has been used to even temporarily store data. Python
 generators are used to ensure minimum buffer loads.
+
+### How Atomic Update in Redis is Ensured?
+
+Pipeline watches have been used to ensure atomic updates within Redis. Following code snippet shows an example:
+```
+def atomic_update(key, value):
+    with db.pipeline() as pipe:
+        while True:
+            try:
+                pipe.watch(key)
+                current_value = pipe.get(key)
+                if current_value:
+                    value = modify(value, current_value.decode('utf-8'))
+                pipe.multi()
+                pipe.set(key, value.encode('utf-8'))
+                pipe.execute()
+                break
+            except WatchError:
+                continue
+```
 
 ### What are the Limitations?
 
