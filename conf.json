@@ -2,17 +2,24 @@
   "elastic": {
     "source": {
       "host": "192.168.5.127",
-      "port": 9200
+      "port": 9200,
+      "index": "lesson_catalog",
+      "type": "lesson"
     },
     "target": {
       "host": "192.168.5.127",
-      "port": 9200
+      "port": 9200,
+      "index": "lesson_catalog_bk",
+      "type": "lesson"
     },
-    "include_id": true
+    "include_id": true,
+    "scroll_size": 1000,
+    "scroll_time": "1m"
   },
   "redis": {
     "host": "localhost",
     "port": 6379,
-    "id": 0
+    "id": 0,
+    "password": "T9rwf2128"
   }
 }
