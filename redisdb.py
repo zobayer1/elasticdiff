@@ -7,7 +7,7 @@ class RedisDb:
         self.db = StrictRedis(host=conf.get('host', 'localhost'),
                               port=conf.get('port', 6379),
                               db=conf.get('id', 0),
-                              password=conf.get('password'),
+                              password=conf.get('password', ''),
                               )
         self.reset()
 
@@ -36,8 +36,7 @@ class RedisDb:
         for key in self.db.scan_iter('*'):
             value = self.db.get(key).decode('utf-8')
             if value.count('#') != 1:
-                parts = value.split('#')
-                for part in parts:
+                for part in value.split('#'):
                     yield(tuple(part.split(':')))
 
     def reset(self):
